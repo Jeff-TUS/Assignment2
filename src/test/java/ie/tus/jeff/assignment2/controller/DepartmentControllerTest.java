@@ -273,4 +273,21 @@ class DepartmentControllerTest {
         mockMvc.perform(delete("/departments/1/employees/99"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void getEmployeesByDepartment_whenEmployeeHasNullDepartment_returns500WithErrorBody()
+            throws Exception {
+        // Simulate a corrupt/detached Employee with no department set
+        Employee corrupt = new Employee();
+        corrupt.setId(99L);
+        corrupt.setName("Orphan");
+        // department intentionally left null
+
+        when(employeeService.getByDepartment(1L)).thenReturn(List.of(corrupt));
+
+        mockMvc.perform(get("/departments/1/employees"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.status").value(500))
+                .andExpect(jsonPath("$.message").value("Unexpected error occurred"));
+    }
 }
