@@ -185,12 +185,24 @@ class DepartmentControllerTest {
     @Test
     void getEmployeesByDepartment_returnsListAnd200() throws Exception {
         Department dept = makeDept(1L, "Engineering");
+
+        Employee e1 = makeEmp(10L, "Alice", dept);
+        Employee e2 = makeEmp(11L, "Bob", dept);
+
         when(employeeService.getByDepartment(1L))
-                .thenReturn(List.of(makeEmp(10L, "Alice", dept), makeEmp(11L, "Bob", dept)));
+                .thenReturn(List.of(e1, e2));
 
         mockMvc.perform(get("/departments/1/employees"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].id").value(10))
+                .andExpect(jsonPath("$[0].name").value("Alice"))
+                .andExpect(jsonPath("$[0].departmentId").value(1))
+                .andExpect(jsonPath("$[1].id").value(11))
+                .andExpect(jsonPath("$[1].name").value("Bob"))
+                .andExpect(jsonPath("$[1].departmentId").value(1));
+
+        verify(employeeService).getByDepartment(1L);
     }
 
     @Test
