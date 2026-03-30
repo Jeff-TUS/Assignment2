@@ -1,11 +1,10 @@
 package ie.tus.jeff.assignment2.repository;
 
 import ie.tus.jeff.assignment2.model.Department;
-import ie.tus.jeff.assignment2.model.Employee;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
